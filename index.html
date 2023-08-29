@@ -1,0 +1,258 @@
+<html>
+<head>
+
+<!-- theme: -->
+
+<style>
+.w3-theme-l5 {color:#000 !important; background-color:#fefbf5 !important}
+.w3-theme-l4 {color:#000 !important; background-color:#fcf2dc !important}
+.w3-theme-l3 {color:#000 !important; background-color:#f9e6ba !important}
+.w3-theme-l2 {color:#000 !important; background-color:#f5d997 !important}
+.w3-theme-l1 {color:#000 !important; background-color:#f2cd75 !important}
+.w3-theme-d1 {color:#000 !important; background-color:#ecb535 !important}
+.w3-theme-d2 {color:#000 !important; background-color:#e9ab18 !important}
+.w3-theme-d3 {color:#fff !important; background-color:#ce9613 !important}
+.w3-theme-d4 {color:#fff !important; background-color:#b08010 !important}
+.w3-theme-d5 {color:#fff !important; background-color:#936b0e !important}
+
+.w3-theme-light {color:#000 !important; background-color:#fefbf5 !important}
+.w3-theme-dark {color:#fff !important; background-color:#936b0e !important}
+.w3-theme-action {color:#fff !important; background-color:#936b0e !important}
+
+.w3-theme {color:#000 !important; background-color:#efc050 !important}
+.w3-text-theme {color:#efc050 !important}
+.w3-border-theme {border-color:#efc050 !important}
+
+.w3-hover-theme:hover {color:#000 !important; background-color:#efc050 !important}
+.w3-hover-text-theme:hover {color:#efc050 !important}
+.w3-hover-border-theme:hover {border-color:#efc050 !important}
+
+</style>
+
+<title>
+  Word and Character Counter
+</title>
+
+<h1>
+  Word and Character Counter
+</h1>
+
+<style>
+h1 {
+   color: #936b0e;
+   text-align: center;
+   padding-top: 40;
+   padding-bottom: 10;
+   font-family: "Papyrus", "fantasy";
+   font-size: 65;
+   font-weight: bold;
+   text-shadow: 4px 4px 5px black;
+}
+
+
+body {
+  background-color: #f5d997;
+}
+
+p {
+  color: rgb(255, 255, 255)
+}
+
+#result {
+  background-color: rgb(255, 255, 255);
+}
+
+.directions {
+  font-size: 24; 
+  text-align: center;
+  margin: auto;
+  width: 50%;
+  color: #b08010;
+  font-family: "Papyrus", "fantasy";
+}
+
+#text {
+  margin-bottom: 2%
+}
+
+#task {
+  margin-bottom: 4%
+}
+
+
+textarea {
+  width: 40%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #efc050;
+  border-radius: 4px;
+  background-color: #f9e6ba;
+  font-family: "Verdana", "Open Sans", "sans-serif";
+  color: #936b0e
+}
+
+#submit {
+  background-color: #ce9613; 
+  border: none;
+  /* border: 2px solid #efc050; */
+  color: #fcf2dc;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  font-family: "Verdana", "Open Sans", "sans-serif";
+  margin-bottom: 3%
+}
+
+/* #select {
+  background-color: #ce9613; 
+  border: 2px solid #efc050;
+  color: #fcf2dc;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  font-family: "Verdana", "Open Sans", "sans-serif"
+} */
+
+/* align */
+
+</style>
+
+<script src="Scripts/code.jquery.com_jquery-3.7.0.min.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+<!--<form action="https://p59ycwnb9k.execute-api.us-east-1.amazonaws.com/Prod/hello">-->
+<form id="myForm" style="text-align: center">
+    <label for="text" class="directions">Paste Your Text Below:</label><br><br>
+    <textarea id="text" name="text"></textarea><br><br>
+  <label for="task" class="directions">Choose a task:</label>
+  <!-- <div class="custom-select", style="width:200px;">
+    <select id="task", name="task">
+      <option value="word-count">Word Count</option>
+      <option value="character-count">Character Count</option>
+    </select>
+  </div> -->
+  <select name="task" id="task">
+    <option value="word-count">Word Count</option>
+    <option value="character-count">Character Count</option>
+  </select><br><br>
+  <input id="submit" type="submit" value="Submit">
+</form>
+
+<!--note: use the script tag for javascript-->
+
+<div id="result"></div>
+
+<script>
+result = null;
+document.addEventListener("DOMContentLoaded", function() { 
+  var form = document.getElementById("myForm");
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    var taskvalue = encodeURIComponent(document.getElementById("task").value);
+    var textvalue = encodeURIComponent(document.getElementById("text").value);
+
+    var AWSUrl = "https://dqlhxb0131.execute-api.us-east-1.amazonaws.com/Prod/hello";
+    var url = `${AWSUrl}?text=${textvalue}&task=${taskvalue}`;
+
+    // format: mPromise = new Promise((resolve, reject) => {} - look into promises a little more
+    fetch(url, {method: "GET"})
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      //result = data;
+
+      //var resultstring = JSON.stringify(data);
+      //$("#result").html(resultstring).show();
+      
+      var key = Object.keys(data)[0];
+      var value = data[key];
+
+      var resultContent = key + ": " + value;
+
+      //original:
+      // $("#result").text(resultContent).show();
+
+      //Animation fiddling
+      // $("#result")
+      //     .hide()
+      //     .text(resultContent)
+      //     .animate({
+      //       opacity: 'show',
+      //       height: '+=500px',
+      //       width: '+=500px'
+      //     });
+
+
+      $("#result")
+          .hide()
+          .text(resultContent)
+          .css({"font-size": "16px", "text-align": "center", "font-family": "Verdana"})
+          .css({"margin": "auto", 
+            "width": "30%", 
+            "border": "10px solid #936b0e", 
+            "padding": "25px",
+            "background-color": "#efc050"})
+          .animate({
+            opacity: "show",
+            fontSize: "40px" // Animate font size to 24px
+          }, 1000);
+
+      $("#result").effect("bounce", {times:3}, 300)
+
+    })
+    //edit data line to retrieve?
+    .catch(error => {console.error("Error:", error);});
+
+      // $("#result").fadeIn(slow);
+      // $("#result").animate({
+      //   height: '+=150px',
+      //   width: '+=150px'});
+  });
+});
+</script>
+
+<!-- <script>
+  $("submit").click(function() {
+    $("#result").fadeIn(slow);
+    $("#result").animate({
+      height: '+=150px',
+      width: '+=150px'});
+  })
+</script> -->
+
+
+<!-- Animation testing
+
+<div id="test" style="border: 1px solid black; padding: 20px;">Initial Content</div>
+  <button id="animateButton">Animate</button>
+  <script>
+    $(document).ready(function() {
+      $("#animateButton").click(function() {
+        $("#test")
+          .hide()
+          .text("New Content")
+          .animate({
+            opacity: 'show',
+            height: '+=50px',
+            width: '+=50px'
+          });
+      });
+    });
+  </script> -->
+
+</body>
+
+
+</html>
